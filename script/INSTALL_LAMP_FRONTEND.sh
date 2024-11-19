@@ -7,7 +7,7 @@ set -ex
 apt update
 
 #Actualizar los paquetes del sistema
-#apt upgrade -y
+apt upgrade -y
 
 #Instalamos el servidor web apache y poniendo -y no hace falta escribir nada
 apt install apache2 -y
@@ -24,8 +24,6 @@ sudo apt install php libapache2-mod-php php-mysql -y
 #Reiniciamos el servicio de apache2
 systemctl restart apache2
 
-#Instalaremos MySQL server
-sudo apt install mysql-server -y
 
 #Copiamos nuestro archivo de prueba de PHP en /var/www/html
 cp ../php/index.php /var/www/html
