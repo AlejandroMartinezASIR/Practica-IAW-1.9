@@ -3,6 +3,8 @@
 #Para mostrar los comandos que son ejecutables con -x, si se pone -ex nos muestra que comando falla
 set -ex 
 
+source .env
+
 #Poner sudo cuando se vaya a lanzar el script
 apt update
 
@@ -15,4 +17,5 @@ apt install apache2 -y
 #Instalamos MySQL server
 apt install mysql-server -y
 
-system daemon-reload
+#configuramos el config de mysql
+sed -i s/127.0.0.1/$MYSQL_PRIVATE_IP/ /etc/mysql/mysql.conf.d/mysqld.cnf
