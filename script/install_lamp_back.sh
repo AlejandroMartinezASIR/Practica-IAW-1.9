@@ -14,3 +14,5 @@ apt install apache2 -y
 
 #Instalamos MySQL server
 apt install mysql-server -y
+
+system daemon-reload
