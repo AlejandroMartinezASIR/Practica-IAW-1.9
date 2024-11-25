@@ -35,8 +35,8 @@ wp config create \
   --dbname=$WORDPRESS_DB_NAME \
   --dbuser=$WORDPRESS_DB_USER \
   --dbpass=$WORDPRESS_DB_PASSWORD \
-  --dbhost=localhost \
-  --path=/var/www/html \
+  --dbhost=$WORDPRESS_DB_HOST \
+  --path=$WORDPRESS_DIRECTORY \
   --allow-root
 
 wp core install \
@@ -45,13 +45,12 @@ wp core install \
   --admin_user=$WORDPRESS_USER \
   --admin_password=$WORDPRESS_PASSWORD \
   --admin_email=$WORDPRESS_EMAIL \
-  --path=/var/www/html \
+  --path=$WORDPRESS_DIRECTORY \
   --allow-root  
 
-wp plugin install wps-hide-login --activate
+wp plugin install wps-hide-login --activate --path=$WORDPRESS_DIRECTORY --allow-root
 
 wp option update whl_page "$WORDPRESS_HIDE_LOGIN_URL" --path=$WORDPRESS_DIRECTORY --allow-root
-
 
 wp rewrite structure '/%postname%/' --path=$WORDPRESS_DIRECTORY --allow-root
 
