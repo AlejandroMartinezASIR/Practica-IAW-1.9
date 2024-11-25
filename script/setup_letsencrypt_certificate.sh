@@ -16,9 +16,6 @@ apt remove certbot -y
 #Lo instalamos
 snap install --classic certbot
 
-#####´
-a2dissite default-ssl.conf
-
 systemctl reload apache2
 
 #L
