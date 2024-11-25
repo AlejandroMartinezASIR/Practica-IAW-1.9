@@ -48,6 +48,7 @@ wp core install \
   --path=/var/www/html \
   --allow-root  
 
+wp plugin install wps-hide-login --activate
 
 wp option update whl_page "$WORDPRESS_HIDE_LOGIN_URL" --path=$WORDPRESS_DIRECTORY --allow-root
 
