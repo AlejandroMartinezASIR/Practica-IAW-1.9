@@ -48,12 +48,14 @@ wp core install \
   --path=$WORDPRESS_DIRECTORY \
   --allow-root  
 
+cp ../htaccess/.htaccess $WORDPRESS_DIRECTORY --allow-root
+
 wp plugin install wps-hide-login --activate --path=$WORDPRESS_DIRECTORY --allow-root
 
 wp option update whl_page "$WORDPRESS_HIDE_LOGIN_URL" --path=$WORDPRESS_DIRECTORY --allow-root
 
 wp rewrite structure '/%postname%/' --path=$WORDPRESS_DIRECTORY --allow-root
 
-cp ../htaccess/.htaccess $WORDPRESS_DIRECTORY
+wp rewrite flush --allow-root
 
-sudo chown -R www-data:www-data $WORDPRESS_DIRECTORY
+sudo chown -R www-data:www-data $WORDPRESS_DIRECTORY --allow-root
