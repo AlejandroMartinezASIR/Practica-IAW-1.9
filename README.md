@@ -12,7 +12,7 @@ Tendremos los siguientes directorios:
     		├── install_lamp_frontend.sh
     		├── install_lamp_backend.sh
     		├── setup_letsencrypt_https.sh    
-    		└── deploy.sh
+    		└── deploys.sh
 
 -   `.env`: Este archivo contiene todas las variables de configuración que se utilizarán en los scripts de Bash.
     
@@ -45,7 +45,7 @@ Configuramos las variables de todos los Scripts
     BACKEND_MYSQL_PRIVATE_IP=172.31.26.16
     FRONTEND_PRIVATE_IP=172.31.23.20
 
-## Contenido archivo "deploy_backend.sh"
+## Contenido archivo "deploy_wordpress_backend.sh"
 
 1.  `set -ex`: Configura el modo de ejecución del script. `-e` hace que el script se detenga si algún comando devuelve un código de error, y `-x` muestra los comandos ejecutados con sus argumentos y resultados.
     
@@ -69,7 +69,7 @@ Configuramos las variables de todos los Scripts
     
 11.  `mysql -u root <<< "FLUSH PRIVILEGES"`: Recarga los privilegios de **MySQL** para aplicar los cambios.
 
-## Contenido archivo "deploy_frontend.sh"
+## Contenido archivo "deploy_wordpress_frontend.sh"
 
 1.  `set -ex`: Configura el modo de ejecución del script. `-e` hace que el script se detenga si algún comando devuelve un código de error, y `-x` muestra los comandos ejecutados con sus argumentos y resultados.
     
