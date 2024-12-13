@@ -1,60 +1,54 @@
 #!/bin/bash
 
-#Muestra todos los comandos que se van ejecutadno
+#Mostrar los comandos que se van ejecutando 
 set -ex
 
-# Actualizamos los repositorios
-apt update
-
-# Actualizamos los paquetes 
-apt upgrade -y
-
-# Ponemos las variables del archivo .env
+# Importamos las variables de entorno
 source .env
 
-# Borramos instalaciones previas de wp-cli
+#Eliminamos descargas prevas de WP-CLI
 rm -rf /tmp/wp-cli.phar
 
-# Descargamos el archivo wp-cli.phar del repositorio oficial de WP-CLI. 
-wget https://raw.githubusercontent.com/wp-cli/builds/gh-pages/phar/wp-cli.phar 
+#Descargamos WP-CLI
+wget https://raw.githubusercontent.com/wp-cli/builds/gh-pages/phar/wp-cli.phar -P /tmp
 
-# Le asignamos permisos de ejecución al archivo wp-cli.phar.
-chmod +x wp-cli.phar
+#Le damos permisos de ejecucion 
+chmod +x /tmp/wp-cli.phar
 
-# Movemos el archivo wp-cli.phar al directorio /usr/local/bin/ con el nombre wp para poder utilizarlo sin necesidad de escribir la ruta completa donde se encuentra.
-mv wp-cli.phar /usr/local/bin/wp
+#Movemos el script WP-CLI al  directorio /usr/local/bin
+mv /tmp/wp-cli.phar /usr/local/bin/wp
 
-# Eliminamos instalaciones revias de WordPress
-rm -rf /var/www/html/*
+#ELiminamos instalaciones previas en /var/www/html
+rm -rf ${WORDPRESS_DIRECTORY}/*
 
-# Descargamos el código fuente de WordPress en /var/www/html
+#Descargamos el codigo fuente de WordPress
 wp core download --locale=es_ES --path=/var/www/html --allow-root
 
-# Creamos la base de datos y el usuario de la base de datos
+#Creamos la base de datos y el usuario para WordPress
 mysql -u root <<< "DROP DATABASE IF EXISTS $WORDPRESS_DB_NAME"
 mysql -u root <<< "CREATE DATABASE $WORDPRESS_DB_NAME"
 mysql -u root <<< "DROP USER IF EXISTS $WORDPRESS_DB_USER@$IP_CLIENTE_MYSQL"
 mysql -u root <<< "CREATE USER $WORDPRESS_DB_USER@$IP_CLIENTE_MYSQL IDENTIFIED BY '$WORDPRESS_DB_PASSWORD'"
 mysql -u root <<< "GRANT ALL PRIVILEGES ON $WORDPRESS_DB_NAME.* TO $WORDPRESS_DB_USER@$IP_CLIENTE_MYSQL"
 
-# Creamos el archivo wp-config
+#Creamos el archivo de configuracion
 wp config create \
   --dbname=$WORDPRESS_DB_NAME \
   --dbuser=$WORDPRESS_DB_USER \
   --dbpass=$WORDPRESS_DB_PASSWORD \
-  --dbhost=localhost \
+  --dbhost=$WORDPRESS_DB_HOST \
   --path=$WORDPRESS_DIRECTORY \
   --allow-root
 
+
 wp core install \
   --url=$LE_DOMAIN \
-  --title="$WORDPRESS_TITLE" \
-  --admin_user=$WORDPRESS_USER \
-  --admin_password=$WORDPRESS_PASSWORD \
-  --admin_email=$WORDPRESS_EMAIL \
+  --title=$WORDPRESS_TITLE \
+  --admin_user=$WORDPRESS_ADMIN_USER \
+  --admin_password=$WORDPRESS_ADMIN_PASS \
+  --admin_email=$WORDPRESS_ADMIN_EMAIL \
   --path=$WORDPRESS_DIRECTORY \
-  --allow-root  
-
+  --allow-root 
 
 # Instalamos y activamos el theme mindscape
 wp theme install mindscape --activate --path=$WORDPRESS_DIRECTORY --allow-root
@@ -63,7 +57,7 @@ wp theme install mindscape --activate --path=$WORDPRESS_DIRECTORY --allow-root
 wp plugin install wps-hide-login --activate --path=$WORDPRESS_DIRECTORY --allow-root
 
 # Configuramos el plugin de url
-wp option update whl_page "$WORDPRESS_HIDE_LOGIN_URL" --path=$WORDPRESS_DIRECTORY --allow-root
+wp option update whl-page "$WORDPRESS_HIDE_LOGIN_URL" --path=$WORDPRESS_DIRECTORY --allow-root
 
 # Configuramos los enlaces permanentes
 wp rewrite structure '/%postname%/' --path=$WORDPRESS_DIRECTORY --allow-root
