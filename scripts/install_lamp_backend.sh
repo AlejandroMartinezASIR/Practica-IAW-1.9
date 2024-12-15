@@ -12,6 +12,8 @@ apt update
 # Actualiza los paquetes
 apt upgrade -y
 
+apt-get remove --purge mysql* -y
+
 # Instalamos mysql server
 apt install mysql-server -y
 
